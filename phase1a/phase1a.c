@@ -1,4 +1,4 @@
-#include "phase1.h"
+#include <phase1.h>
 #include <stdio.h>
 #include <usloss.h>
 #include <stdlib.h>
@@ -15,7 +15,8 @@ struct procStruct *next;
 }pcbStruct;
 
 pcbStruct pcbTable[MAXPROC];
-
+//I put 7 elements so that theres no translating thats needed, just 1 for 1
+//in the priority system
 pcbStruct *runQueue[7];
 
 void phase1_init(void){
@@ -28,7 +29,9 @@ void phase1_init(void){
         runQueue[i]=NULL;
     }
     runQueue[7]= &pcbTable[0];
+    testcase_main()
 }
+
 void addToQueue(pcbStruct *process){
     int priority = process->prio;
    if(runQueue[priority]==NULL){
@@ -87,4 +90,8 @@ int unblockProc(int pid){
 
 void errorPrint(char *code){
 printf(code);
+}
+
+void main(){
+    phase1_init();
 }
