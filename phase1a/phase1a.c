@@ -1,8 +1,9 @@
 #include <phase1.h>
 #include <stdio.h>
-#include <usloss.h>
+//#include <usloss.h>
 #include <stdlib.h>
 #include <string.h>
+
 typedef struct pcbStruct{
 int pid;
 int prio;
@@ -14,6 +15,7 @@ int siblings[MAXPROC];
 struct procStruct *next;
 }pcbStruct;
 
+int pidCount;
 pcbStruct pcbTable[MAXPROC];
 //I put 7 elements so that theres no translating thats needed, just 1 for 1
 //in the priority system
@@ -55,9 +57,24 @@ pcbStruct *removeFromQueue(int priority){
     return process;
 }
 
+int pidCounter(int prevPid){
+    return prevPid++;
+}
+
 int spork(char *name, int (*startFunc)(char*), char *arg, 
 int stackSize, int priority){
-    
+    pcbStruct spork;
+    spork.name= *name;
+    spork.pid = pidCounter(pidCount);
+    spork.prio=priority;
+    if(stackSize<USLOSS_MIN_STACK){
+        return -2;
+    }
+    if(priority<1 or priority>5){
+        return -1;
+    }
+    pcbTable[priority] = addToQueue(spork);
+    return spork.pid;
 }
 
 int join(int *status){
