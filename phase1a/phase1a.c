@@ -23,8 +23,7 @@ pcbStruct pcbTable[MAXPROC];
 pcbStruct *runQueue[7];
 
 void phase1_init(void)
-{
-    // inputs init into pcbtable
+{    // inputs init into pcbtable
     pcbTable[0].pid = 1;
     pcbTable[0].prio = 6;
     char *intName = "init";
@@ -89,11 +88,16 @@ int spork(char *name, int (*startFunc)(char *), char *arg,
     addToQueue(newProcess);
     USLOSS_ContextInit(&childContext, newProcess->stack, stackSize,
     startFunc);
+    USLOSS_ContextSwitch()
+    while(join())
     return spork.pid;
 }
 
 int join(int *status)
 {
+    if(status == NULL){
+        return -3;
+    }
 }
 
 void quit(int status)
